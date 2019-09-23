@@ -1,0 +1,20 @@
+
+### Directories to avoid ###
+
+# binary dirs
+build/
+build32/
+build64/
+
+# vs ancillary files
+*.ipch
+*.db
+*.pch
+*.pdb
+*.obj
+*.ilk
+*.iobj
+*.idb
+*.tlog
+*.log
+*.lastbuildstate
