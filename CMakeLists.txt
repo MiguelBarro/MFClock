@@ -1,12 +1,12 @@
 #-----CMakeLists.txt------
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 
 project(TskClock LANGUAGES CXX)
 
 find_package(MFC REQUIRED)
 
-set(CMAKE_MFC_FLAG 1)	# static library
+set(CMAKE_MFC_FLAG 2)	# dynamic library
 
 set(SOURCES 	TskClock.cpp
 				TskClockDlg.cpp
@@ -22,8 +22,6 @@ set_source_files_properties( ${PRECOMPILED} PROPERTIES COMPILE_OPTIONS "/Yc stda
 
 #create an executable
 add_executable(TskClock ${HEADERS} ${SOURCES} ${PRECOMPILED})
-
-target_compile_options(TskClock PUBLIC $<IF:$<CONFIG:Debug>,/MTd,/MT>) 
 
 set_target_properties(TskClock PROPERTIES WIN32_EXECUTABLE TRUE)
 
