@@ -1,10 +1,10 @@
 
-// TskClockDlg.cpp : implementation file
+// eProsimaClockDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
-#include "TskClock.h"
-#include "TskClockDlg.h"
+#include "eProsimaClock.h"
+#include "eProsimaClockDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
@@ -43,39 +43,39 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CTskClockDlg dialog
+// CeProsimaClockDlg dialog
 
 
 
 
-CTskClockDlg::CTskClockDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CTskClockDlg::IDD, pParent)
+CeProsimaClockDlg::CeProsimaClockDlg(CWnd* pParent /*=NULL*/)
+	: CDialogEx(CeProsimaClockDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CTskClockDlg::DoDataExchange(CDataExchange* pDX)
+void CeProsimaClockDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CTskClockDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CeProsimaClockDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_PAUSAR, &CTskClockDlg::OnBnClickedPausar)
-	ON_BN_CLICKED(IDC_ALTERNAR, &CTskClockDlg::OnBnClickedAlternar)
-	ON_BN_CLICKED(IDC_RESETEAR, &CTskClockDlg::OnBnClickedResetear)
-	ON_UPDATE_COMMAND_UI_RANGE(IDC_EDIT_A, IDC_EDIT_B, &CTskClockDlg::OnUpdateTimers) 
-	ON_UPDATE_COMMAND_UI(IDC_ALTERNAR, &CTskClockDlg::OnUpdateAlternar)
-	ON_UPDATE_COMMAND_UI(IDC_PAUSAR, &CTskClockDlg::OnUpdatePausar)
+	ON_BN_CLICKED(IDC_PAUSAR, &CeProsimaClockDlg::OnBnClickedPausar)
+	ON_BN_CLICKED(IDC_ALTERNAR, &CeProsimaClockDlg::OnBnClickedAlternar)
+	ON_BN_CLICKED(IDC_RESETEAR, &CeProsimaClockDlg::OnBnClickedResetear)
+	ON_UPDATE_COMMAND_UI_RANGE(IDC_EDIT_A, IDC_EDIT_B, &CeProsimaClockDlg::OnUpdateTimers) 
+	ON_UPDATE_COMMAND_UI(IDC_ALTERNAR, &CeProsimaClockDlg::OnUpdateAlternar)
+	ON_UPDATE_COMMAND_UI(IDC_PAUSAR, &CeProsimaClockDlg::OnUpdatePausar)
 END_MESSAGE_MAP()
 
 
-// CTskClockDlg message handlers
+// CeProsimaClockDlg message handlers
 
-BOOL CTskClockDlg::OnInitDialog()
+BOOL CeProsimaClockDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -115,7 +115,7 @@ BOOL CTskClockDlg::OnInitDialog()
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
-void CTskClockDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CeProsimaClockDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -132,7 +132,7 @@ void CTskClockDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
-void CTskClockDlg::OnPaint()
+void CeProsimaClockDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -159,13 +159,13 @@ void CTskClockDlg::OnPaint()
 
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
-HCURSOR CTskClockDlg::OnQueryDragIcon()
+HCURSOR CeProsimaClockDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
-void CTskClockDlg::OnTimer(UINT_PTR nIDEvent)
+void CeProsimaClockDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	CTime actual = CTime::GetCurrentTime();
 
@@ -188,7 +188,7 @@ void CTskClockDlg::OnTimer(UINT_PTR nIDEvent)
 	CDialogEx::OnTimer(nIDEvent);
 }
 
-void CTskClockDlg::OnBnClickedPausar()
+void CeProsimaClockDlg::OnBnClickedPausar()
 {
 	CButton * pB = (CButton*)GetDlgItem(IDC_PAUSAR);
 	int estado = pB->GetCheck();
@@ -207,7 +207,7 @@ void CTskClockDlg::OnBnClickedPausar()
 	UpdateDialogControls(this,TRUE);
 }
 
-void CTskClockDlg::OnBnClickedAlternar()
+void CeProsimaClockDlg::OnBnClickedAlternar()
 {
 	CTime actual = CTime::GetCurrentTime();
 
@@ -228,7 +228,7 @@ void CTskClockDlg::OnBnClickedAlternar()
 	UpdateDialogControls(this,TRUE);
 }
 
-void CTskClockDlg::OnBnClickedResetear()
+void CeProsimaClockDlg::OnBnClickedResetear()
 {
 	CTimeSpan aux;
 	counterA = aux;
@@ -240,7 +240,7 @@ void CTskClockDlg::OnBnClickedResetear()
 	UpdateDialogControls(this,TRUE);
 }
 
-void CTskClockDlg::OnUpdateTimers(CCmdUI *pCmdUI)
+void CeProsimaClockDlg::OnUpdateTimers(CCmdUI *pCmdUI)
 {
 	CTimeSpan ts;
 	CWnd * pE = pCmdUI->m_pOther;
@@ -253,7 +253,7 @@ void CTskClockDlg::OnUpdateTimers(CCmdUI *pCmdUI)
 	pE->SetWindowText(ts.Format(_T("%H:%M:%S")));
 }
 
-void CTskClockDlg::OnUpdateAlternar(CCmdUI *pCmdUI)
+void CeProsimaClockDlg::OnUpdateAlternar(CCmdUI *pCmdUI)
 {
 	CButton * pB = (CButton*)pCmdUI->m_pOther;
 	int estado = pB->GetCheck();
@@ -261,11 +261,11 @@ void CTskClockDlg::OnUpdateAlternar(CCmdUI *pCmdUI)
 
 	if( estado == BST_CHECKED )
 	{	// Contador B
-		caption = _T("Corriendo B");
+		caption = _T("Run B");
 	}
 	else
 	{	// Contador A
-		caption = _T("Corriendo A");
+		caption = _T("Run A");
 	}
 
 	pB->GetWindowText(actual);
@@ -273,7 +273,7 @@ void CTskClockDlg::OnUpdateAlternar(CCmdUI *pCmdUI)
 		pB->SetWindowText(caption);
 }
 
-void CTskClockDlg::OnUpdatePausar(CCmdUI *pCmdUI)
+void CeProsimaClockDlg::OnUpdatePausar(CCmdUI *pCmdUI)
 {
 	CButton * pB = (CButton*)pCmdUI->m_pOther;
 	int estado = pB->GetCheck();
@@ -281,11 +281,11 @@ void CTskClockDlg::OnUpdatePausar(CCmdUI *pCmdUI)
 
 	if( estado == BST_CHECKED )
 	{	// Parar
-		caption = _T("Parar");
+		caption = _T("Stop");
 	}
 	else
 	{	// Arrancar
-		caption = _T("Arrancar");
+		caption = _T("Start");
 	}
 
 	pB->GetWindowText(actual);

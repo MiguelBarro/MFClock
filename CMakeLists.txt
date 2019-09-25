@@ -1,37 +1,39 @@
 #-----CMakeLists.txt------
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.14)
 
-project(TskClock LANGUAGES CXX)
+project(eProsimaClock LANGUAGES CXX)
 
 find_package(MFC REQUIRED)
 
-set(CMAKE_MFC_FLAG 2)	# dynamic library
+set(CMAKE_MFC_FLAG 1)	# static library
 
-set(SOURCES 	TskClock.cpp
-				TskClockDlg.cpp
-				TskClock.rc)
+set(SOURCES 	eProsimaClock.cpp
+		eProsimaClockDlg.cpp
+		eProsimaClock.rc)
 				
-set(HEADERS		stdafx.h
-				TskClock.h
-				TskClock.h)
+set(HEADERS	stdafx.h
+		eProsimaClock.h
+		eProsimaClock.h)
 				
 set(PRECOMPILED stdafx.cpp)
 set_source_files_properties( ${SOURCES} PROPERTIES COMPILE_OPTIONS "/Yu stdafx.h")
 set_source_files_properties( ${PRECOMPILED} PROPERTIES COMPILE_OPTIONS "/Yc stdafx.h")
 
 #create an executable
-add_executable(TskClock ${HEADERS} ${SOURCES} ${PRECOMPILED})
+add_executable(eProsimaClock ${HEADERS} ${SOURCES} ${PRECOMPILED})
 
-set_target_properties(TskClock PROPERTIES WIN32_EXECUTABLE TRUE)
+target_compile_options(eProsimaClock PUBLIC $<IF:$<CONFIG:Debug>,/MTd,/MT>) 
+
+set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE)
 
 #install the binaries
-install(TARGETS TskClock 
+install(TARGETS eProsimaClock 
                 CONFIGURATIONS Release
                 RUNTIME DESTINATION installed/bin               COMPONENT Runtime
                 ARCHIVE DESTINATION installed/lib               COMPONENT Development)
 
-install(TARGETS TskClock
+install(TARGETS eProsimaClock
                 CONFIGURATIONS Debug
                 RUNTIME DESTINATION installed/bin/Debug         COMPONENT Runtime
                 ARCHIVE DESTINATION installed/lib/Debug         COMPONENT Development)

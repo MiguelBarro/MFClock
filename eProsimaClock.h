@@ -11,14 +11,14 @@
 #include "resource.h"		// main symbols
 
 
-// CTskClockApp:
-// See TskClock.cpp for the implementation of this class
+// CeProsimaClockApp:
+// See eProsimaClock.cpp for the implementation of this class
 //
 
-class CTskClockApp : public CWinApp
+class CeProsimaClockApp : public CWinApp
 {
 public:
-	CTskClockApp();
+	CeProsimaClockApp();
 
 // Overrides
 public:
@@ -29,4 +29,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern CTskClockApp theApp;
+extern CeProsimaClockApp theApp;

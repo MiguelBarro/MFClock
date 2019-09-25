@@ -1,40 +1,40 @@
 
-// TskClock.cpp : Defines the class behaviors for the application.
+// eProsimaClock.cpp : Defines the class behaviors for the application.
 //
 
 #include "stdafx.h"
-#include "TskClock.h"
-#include "TskClockDlg.h"
+#include "eProsimaClock.h"
+#include "eProsimaClockDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
-// CTskClockApp
+// CeProsimaClockApp
 
-BEGIN_MESSAGE_MAP(CTskClockApp, CWinApp)
+BEGIN_MESSAGE_MAP(CeProsimaClockApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CTskClockApp construction
+// CeProsimaClockApp construction
 
-CTskClockApp::CTskClockApp()
+CeProsimaClockApp::CeProsimaClockApp()
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
 }
 
 
-// The one and only CTskClockApp object
+// The one and only CeProsimaClockApp object
 
-CTskClockApp theApp;
+CeProsimaClockApp theApp;
 
 
-// CTskClockApp initialization
+// CeProsimaClockApp initialization
 
-BOOL CTskClockApp::InitInstance()
+BOOL CeProsimaClockApp::InitInstance()
 {
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
@@ -62,7 +62,7 @@ BOOL CTskClockApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-	CTskClockDlg dlg;
+	CeProsimaClockDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

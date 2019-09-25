@@ -5,15 +5,15 @@
 #pragma once
 
 
-// CTskClockDlg dialog
-class CTskClockDlg : public CDialogEx
+// CeProsimaClockDlg dialog
+class CeProsimaClockDlg : public CDialogEx
 {
 // Construction
 public:
-	CTskClockDlg(CWnd* pParent = NULL);	// standard constructor
+	CeProsimaClockDlg(CWnd* pParent = NULL);	// standard constructor
 
 // Dialog Data
-	enum { IDD = IDD_TSKCLOCK_DIALOG };
+	enum { IDD = IDD_CLOCK_DIALOG };
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
