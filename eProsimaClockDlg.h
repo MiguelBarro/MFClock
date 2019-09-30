@@ -1,8 +1,12 @@
 
-// TskClockDlg.h : header file
+// eProsimaClockDlg.h : header file
 //
 
 #pragma once
+
+#include "resource.h"		// main symbols
+
+class CeProsimaClockApp;
 
 
 // CeProsimaClockDlg dialog
@@ -16,15 +20,15 @@ public:
 	enum { IDD = IDD_CLOCK_DIALOG };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
+    BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) override;
 
 // Implementation
 protected:
 	HICON m_hIcon;
-	CFont fuente;
+	CFont prefix_font, count_font;
 
-	CTimeSpan counterA, counterB;
-	CTime reference;
+    CeProsimaClockApp * GetApp();
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
@@ -33,12 +37,9 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnBnClickedPausar();
-	afx_msg void OnBnClickedAlternar();
-	afx_msg void OnBnClickedResetear();
-	afx_msg void OnUpdateTimers(CCmdUI *pCmdUI);
-	afx_msg void OnUpdateAlternar(CCmdUI *pCmdUI);
-	afx_msg void OnUpdatePausar(CCmdUI *pCmdUI);
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedTimerState();
+    afx_msg void OnListenerCallback(); // callback translation into command
 
+    afx_msg void OnDestroy();
 };

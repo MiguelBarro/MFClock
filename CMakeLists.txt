@@ -1,15 +1,25 @@
 #-----CMakeLists.txt------
 
-cmake_minimum_required(VERSION 3.13.2)
+cmake_minimum_required(VERSION 3.15.3)
+
+cmake_policy(SET CMP0091 NEW)
 
 project(eProsimaClock LANGUAGES CXX)
 
-# incorporate MFC support
+# incorporate MFC static support
 find_package(MFC REQUIRED)
-set(CMAKE_MFC_FLAG 1)	# static library
 
-#incorporate fastrtps support
+set(CMAKE_MFC_FLAG 1)	# static library
+set(BUILD_SHARED_LIBS OFF) # fastrtps doesn't explicitly defined the kind of linking
+
+# incorporate fastrtps support
+find_package(fastcdr REQUIRED) # idl types dependency
 find_package(fastrtps REQUIRED)
+
+set(IDL_TYPES 
+        Type/eProsimaClockType.cxx
+        Type/eProsimaClockTypePubSubTypes.cxx
+    )
 
 set(SOURCES 	eProsimaClock.cpp
 		eProsimaClockDlg.cpp
@@ -17,22 +27,23 @@ set(SOURCES 	eProsimaClock.cpp
 				
 set(HEADERS	stdafx.h
 		eProsimaClock.h
-		eProsimaClock.h)
+		eProsimaClockDlg.h
+        Type/eProsimaClockType.h
+        Type/eProsimaClockTypePubSubTypes.h
+        )
 				
 set(PRECOMPILED stdafx.cpp)
 set_source_files_properties( ${SOURCES} PROPERTIES COMPILE_OPTIONS "/Yu stdafx.h")
 set_source_files_properties( ${PRECOMPILED} PROPERTIES COMPILE_OPTIONS "/Yc stdafx.h")
 
 #create an executable
-add_executable(eProsimaClock ${HEADERS} ${SOURCES} ${PRECOMPILED})
+add_executable(eProsimaClock ${HEADERS} ${SOURCES} ${PRECOMPILED} ${IDL_TYPES})
 
-# MFC static link support
-target_compile_options(eProsimaClock PUBLIC $<IF:$<CONFIG:Debug>,/MTd,/MT>) 
-set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE)
+set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # fastrtps support
-set(BUILD_SHARED_LIBS OFF) # fastrtps doesn't explicitly defined the kind of linking
-target_link_libraries(eProsimaClock fastrtps)
+target_link_libraries(eProsimaClock fastcdr fastrtps)
 
 #install the binaries
 install(TARGETS eProsimaClock 

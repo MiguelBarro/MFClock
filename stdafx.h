@@ -37,13 +37,6 @@
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
 
 
-
-
-
-
-
-
-
 #ifdef _UNICODE
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -54,4 +47,20 @@
 #endif
 #endif
 
+
+// In order to workaround the max() min() issue we undef those macros, I cannot use NOMINMAX workaround because some
+// MFC headers actually use them
+#undef max
+#undef min
+
+// fastrts dependencies
+
+#include <fastrtps/Domain.h>
+#include <fastrtps/publisher/Publisher.h>
+#include <fastrtps/subscriber/Subscriber.h>
+#include <fastrtps/subscriber/SampleInfo.h>
+
+// STL auxiliaries
+
+#include <sstream>
 

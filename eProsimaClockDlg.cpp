@@ -45,9 +45,6 @@ END_MESSAGE_MAP()
 
 // CeProsimaClockDlg dialog
 
-
-
-
 CeProsimaClockDlg::CeProsimaClockDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CeProsimaClockDlg::IDD, pParent)
 {
@@ -59,19 +56,34 @@ void CeProsimaClockDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
+// Let the app has a chance on commands
+BOOL CeProsimaClockDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) /*override*/
+{
+    // first try local processing
+    if(!CDialogEx::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+    {
+        // then let the app object have a chance on commands
+         return GetApp()->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+    }
+
+    return TRUE;
+}
+
+
 BEGIN_MESSAGE_MAP(CeProsimaClockDlg, CDialogEx)
+    ON_WM_TIMER()
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_PAUSAR, &CeProsimaClockDlg::OnBnClickedPausar)
-	ON_BN_CLICKED(IDC_ALTERNAR, &CeProsimaClockDlg::OnBnClickedAlternar)
-	ON_BN_CLICKED(IDC_RESETEAR, &CeProsimaClockDlg::OnBnClickedResetear)
-	ON_UPDATE_COMMAND_UI_RANGE(IDC_EDIT_A, IDC_EDIT_B, &CeProsimaClockDlg::OnUpdateTimers) 
-	ON_UPDATE_COMMAND_UI(IDC_ALTERNAR, &CeProsimaClockDlg::OnUpdateAlternar)
-	ON_UPDATE_COMMAND_UI(IDC_PAUSAR, &CeProsimaClockDlg::OnUpdatePausar)
+	ON_BN_CLICKED(IDC_TIMER_STATE, &CeProsimaClockDlg::OnBnClickedTimerState)
+    ON_COMMAND(IDC_LISTENER,&CeProsimaClockDlg::OnListenerCallback)
+    ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
+CeProsimaClockApp * CeProsimaClockDlg::GetApp()
+{
+    return static_cast<CeProsimaClockApp*>(AfxGetApp());;
+}
 
 // CeProsimaClockDlg message handlers
 
@@ -105,12 +117,12 @@ BOOL CeProsimaClockDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// Crear la nueva fuente
-	fuente.CreatePointFont(200,_T("Courier New"),GetDC());
-	GetDlgItem(IDC_EDIT_A)->SetFont(&fuente);
-	GetDlgItem(IDC_EDIT_B)->SetFont(&fuente);
+    prefix_font.CreatePointFont(150,_T("Courier New"),GetDC());
+	GetDlgItem(IDC_PUBLISHER_NAME)->SetFont(&prefix_font);
+    count_font.CreatePointFont(150, _T("Courier New"), GetDC());
+	GetDlgItem(IDC_VALUE)->SetFont(&count_font);
 
-	// Resetear de entrada
-	OnBnClickedResetear();
+    UpdateDialogControls(GetApp(), TRUE);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -164,132 +176,38 @@ HCURSOR CeProsimaClockDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CeProsimaClockDlg::OnListenerCallback()
+{
+    // This message is posted by the listener callbacks to update the dialog
+    UpdateDialogControls(GetApp(), TRUE);
+}
+
+void CeProsimaClockDlg::OnBnClickedTimerState()
+{
+    CButton * pB = (CButton*)GetDlgItem(IDC_TIMER_STATE);
+    int estado = pB->GetCheck();
+
+    if(estado == BST_CHECKED)
+    {	// Start
+        SetTimer(IDC_TIMER_STATE, 1000, 0);
+    }
+    else
+    {	// Stop
+        KillTimer(IDC_TIMER_STATE);
+    }
+
+    // Update all controls, if not handled by dialog delegate on application object
+    UpdateDialogControls(AfxGetApp(), TRUE);
+}
 
 void CeProsimaClockDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	CTime actual = CTime::GetCurrentTime();
-
-	// Actualizar el time span correspondiente
-	CButton * pB = (CButton*)GetDlgItem(IDC_ALTERNAR);
-	int estado = pB->GetCheck();
-
-	if( estado == BST_CHECKED )
-	{	// Contador B
-		counterB = actual - reference;
-	}
-	else
-	{	// Contador A
-		counterA = actual - reference;
-	}
-
-	// Actualizar todos los controles
-	UpdateDialogControls(this,TRUE);
-
-	CDialogEx::OnTimer(nIDEvent);
+    GetApp()->OnTimer(nIDEvent);
 }
 
-void CeProsimaClockDlg::OnBnClickedPausar()
+void CeProsimaClockDlg::OnDestroy()
 {
-	CButton * pB = (CButton*)GetDlgItem(IDC_PAUSAR);
-	int estado = pB->GetCheck();
+    GetApp()->OnCloseDialog();
 
-	if( estado == BST_CHECKED )
-	{	// Arrancar
-		SetTimer(IDC_PAUSAR,1000,0);
-		OnBnClickedAlternar();
-	}
-	else
-	{	// Pausar
-		KillTimer(IDC_PAUSAR);
-	}
-
-	// Actualizar todos los controles
-	UpdateDialogControls(this,TRUE);
-}
-
-void CeProsimaClockDlg::OnBnClickedAlternar()
-{
-	CTime actual = CTime::GetCurrentTime();
-
-	// Modificar el tiempo de reset
-	CButton * pB = (CButton*)GetDlgItem(IDC_ALTERNAR);
-	int estado = pB->GetCheck();
-
-	if( estado == BST_CHECKED )
-	{	// Contador B
-		reference = actual - counterB;	
-	}
-	else
-	{	// Contador A
-		reference = actual - counterA;
-	}
-
-	// Actualizar todos los controles
-	UpdateDialogControls(this,TRUE);
-}
-
-void CeProsimaClockDlg::OnBnClickedResetear()
-{
-	CTimeSpan aux;
-	counterA = aux;
-	counterB = aux;
-
-	OnBnClickedAlternar();
-
-	// Actualizar todos los controles
-	UpdateDialogControls(this,TRUE);
-}
-
-void CeProsimaClockDlg::OnUpdateTimers(CCmdUI *pCmdUI)
-{
-	CTimeSpan ts;
-	CWnd * pE = pCmdUI->m_pOther;
-	
-	if( pE->GetDlgCtrlID() == IDC_EDIT_A )
-		ts = counterA;
-	else
-		ts = counterB;
-
-	pE->SetWindowText(ts.Format(_T("%H:%M:%S")));
-}
-
-void CeProsimaClockDlg::OnUpdateAlternar(CCmdUI *pCmdUI)
-{
-	CButton * pB = (CButton*)pCmdUI->m_pOther;
-	int estado = pB->GetCheck();
-	CString caption, actual;
-
-	if( estado == BST_CHECKED )
-	{	// Contador B
-		caption = _T("Run B");
-	}
-	else
-	{	// Contador A
-		caption = _T("Run A");
-	}
-
-	pB->GetWindowText(actual);
-	if( caption != actual)
-		pB->SetWindowText(caption);
-}
-
-void CeProsimaClockDlg::OnUpdatePausar(CCmdUI *pCmdUI)
-{
-	CButton * pB = (CButton*)pCmdUI->m_pOther;
-	int estado = pB->GetCheck();
-	CString caption, actual;
-
-	if( estado == BST_CHECKED )
-	{	// Parar
-		caption = _T("Stop");
-	}
-	else
-	{	// Arrancar
-		caption = _T("Start");
-	}
-
-	pB->GetWindowText(actual);
-	if( caption != actual)
-		pB->SetWindowText(caption);
-
+    CDialogEx::OnDestroy();
 }

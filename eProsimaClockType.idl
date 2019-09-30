@@ -1,0 +1,4 @@
+struct eProsimaClock
+{
+    int64 time;
+};
