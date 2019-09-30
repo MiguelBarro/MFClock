@@ -1,12 +1,15 @@
 #-----CMakeLists.txt------
 
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13.2)
 
 project(eProsimaClock LANGUAGES CXX)
 
+# incorporate MFC support
 find_package(MFC REQUIRED)
-
 set(CMAKE_MFC_FLAG 1)	# static library
+
+#incorporate fastrtps support
+find_package(fastrtps REQUIRED)
 
 set(SOURCES 	eProsimaClock.cpp
 		eProsimaClockDlg.cpp
@@ -23,9 +26,13 @@ set_source_files_properties( ${PRECOMPILED} PROPERTIES COMPILE_OPTIONS "/Yc stda
 #create an executable
 add_executable(eProsimaClock ${HEADERS} ${SOURCES} ${PRECOMPILED})
 
+# MFC static link support
 target_compile_options(eProsimaClock PUBLIC $<IF:$<CONFIG:Debug>,/MTd,/MT>) 
-
 set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE)
+
+# fastrtps support
+set(BUILD_SHARED_LIBS OFF) # fastrtps doesn't explicitly defined the kind of linking
+target_link_libraries(eProsimaClock fastrtps)
 
 #install the binaries
 install(TARGETS eProsimaClock 
