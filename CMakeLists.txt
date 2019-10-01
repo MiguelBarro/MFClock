@@ -9,8 +9,11 @@ project(eProsimaClock LANGUAGES CXX)
 # incorporate MFC static support
 find_package(MFC REQUIRED)
 
-set(CMAKE_MFC_FLAG 1)	# static library
-set(BUILD_SHARED_LIBS OFF) # fastrtps doesn't explicitly defined the kind of linking
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_MFC_FLAG 2)	# dynamic library
+else()
+    set(CMAKE_MFC_FLAG 1)	# static library  
+endif()
 
 # incorporate fastrtps support
 find_package(fastcdr REQUIRED) # idl types dependency
@@ -39,8 +42,13 @@ set_source_files_properties( ${PRECOMPILED} PROPERTIES COMPILE_OPTIONS "/Yc stda
 #create an executable
 add_executable(eProsimaClock ${HEADERS} ${SOURCES} ${PRECOMPILED} ${IDL_TYPES})
 
-set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE
-    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+if(BUILD_SHARED_LIBS)
+    set_target_properties(eProsimaClock PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+else()
+    set_target_properties(eProsimaClock PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE)
 
 # fastrtps support
 target_link_libraries(eProsimaClock fastcdr fastrtps)
