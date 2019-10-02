@@ -12,11 +12,8 @@
 
 // fastrts dependencies
 
-#include <fastrtps/participant/ParticipantListener.h>
 #include <fastrtps/subscriber/SubscriberListener.h>
-
 #include "Type/eProsimaClockTypePubSubTypes.h"
-
 #include <set>  
 
 
@@ -26,7 +23,6 @@
 
 class CeProsimaClockApp : 
     public CWinApp,
-    public eprosima::fastrtps::ParticipantListener,
     public eprosima::fastrtps::SubscriberListener
 
 {
@@ -58,7 +54,7 @@ protected:
     void createSubscriber();
 
 // Listener overrides, only interested on the publishers
-    void onPublisherDiscovery(eprosima::fastrtps::Participant* participant, eprosima::fastrtps::rtps::WriterDiscoveryInfo&& info) override;
+    void onSubscriptionMatched(eprosima::fastrtps::Subscriber* sub, eprosima::fastrtps::rtps::MatchingInfo& info) override;
     void onNewDataMessage(eprosima::fastrtps::Subscriber* sub) override;
 
 // Implementation

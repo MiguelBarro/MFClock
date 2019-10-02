@@ -43,7 +43,7 @@ BOOL CeProsimaClockApp::InitInstance()
     // fastrtps support, enable use of xml config files
     ParticipantAttributes PParam;
     Domain::getDefaultParticipantAttributes(PParam);
-    m_part.reset(Domain::createParticipant(PParam, this), &Domain::removeParticipant);
+    m_part.reset(Domain::createParticipant(PParam), &Domain::removeParticipant);
 
     if(!m_part)
     {
@@ -240,17 +240,17 @@ void CeProsimaClockApp::OnBnClickedEndpointType()
 }
 
 // Update the publishers set
-void CeProsimaClockApp::onPublisherDiscovery(eprosima::fastrtps::Participant* participant, eprosima::fastrtps::rtps::WriterDiscoveryInfo&& info) /*override*/
+void CeProsimaClockApp::onSubscriptionMatched(eprosima::fastrtps::Subscriber* sub, eprosima::fastrtps::rtps::MatchingInfo& info) /*override*/
 {
-    using STATUS = eprosima::fastrtps::rtps::WriterDiscoveryInfo::DISCOVERY_STATUS;
+    using STATUS = eprosima::fastrtps::rtps::MatchingStatus;
 
     switch(info.status)
     {
-    case STATUS::DISCOVERED_WRITER:
-        m_publishers.insert(info.info.guid());
+    case STATUS::MATCHED_MATCHING:
+        m_publishers.insert(info.remoteEndpointGuid);
         break;
-    case STATUS::REMOVED_WRITER:
-        m_publishers.erase(info.info.guid());
+    case STATUS::REMOVED_MATCHING:
+        m_publishers.erase(info.remoteEndpointGuid);
         break;
     }
 
