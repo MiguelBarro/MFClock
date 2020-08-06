@@ -50,18 +50,15 @@ endif()
 
 set_target_properties(eProsimaClock PROPERTIES WIN32_EXECUTABLE TRUE)
 
+# Properties that change bin names depending on current config.
+set_target_properties(eProsimaClock PROPERTIES MINSIZEREL_POSTFIX m )
+set_target_properties(eProsimaClock PROPERTIES RELWITHDEBINFO_POSTFIX rd )
+set_target_properties(eProsimaClock PROPERTIES DEBUG_POSTFIX d )
+
 # fastrtps support
 target_link_libraries(eProsimaClock fastcdr fastrtps)
 
 #install the binaries
 install(TARGETS eProsimaClock 
-                CONFIGURATIONS Release
-                RUNTIME DESTINATION installed/bin               COMPONENT Runtime
-                ARCHIVE DESTINATION installed/lib               COMPONENT Development)
-
-install(TARGETS eProsimaClock
-                CONFIGURATIONS Debug
-                RUNTIME DESTINATION installed/bin/Debug         COMPONENT Runtime
-                ARCHIVE DESTINATION installed/lib/Debug         COMPONENT Development)
-
-
+                RUNTIME DESTINATION bin               COMPONENT Runtime
+                ARCHIVE DESTINATION lib               COMPONENT Development)

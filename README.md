@@ -23,6 +23,14 @@ One must have a proper fastrtps installation in order to link dynamically or sta
     -DBUILD_SHARED_LIBS=OFF -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded$<$<CONFIG:Debug>:Debug>" -DCMAKE_POLICY_DEFAULT_CMP0091=NEW 
  ```  
 
+## Build & install example
+
+A **Install-ClockEprosima.ps1** powershell cmdlet script is provided to simplify installation and provide a deployment example. In order to access the script help use:
+
+```
+> get-help .\Install-ClockEprosima.ps1 -full
+```
+
 ## Example operation
 
 The application generates a dialog with two displays and two buttons. The first button allows to publish or subscribe current counter count. The second button is only enable for publishing and starts and stops the counter. 
